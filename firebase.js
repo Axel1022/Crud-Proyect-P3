@@ -1,6 +1,18 @@
 // Import the functions you need from the SDKs you need
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-app.js";
-import {} from "https://www.gstatic.com/firebasejs/10.4.0/firebase-firestore.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.2/firebase-app.js";
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+import {
+  getFirestore,
+  collection,
+  getDocs,
+  onSnapshot,
+  addDoc,
+  deleteDoc,
+  doc,
+  getDoc,
+  updateDoc,
+} from "https://www.gstatic.com/firebasejs/9.6.2/firebase-firestore.js";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -14,5 +26,8 @@ const firebaseConfig = {
   appId: "1:220063668810:web:f0c1c00ca0387144ef64b3",
 };
 
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
+export const app = initializeApp(firebaseConfig);
+export const db = getFirestore();
+
+export const guardartarea = (title, descripcion) =>
+  addDoc(collection(db, "tareas"), { title, descripcion });
