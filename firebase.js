@@ -31,3 +31,11 @@ export const db = getFirestore();
 
 export const guardartarea = (title, descripcion) =>
   addDoc(collection(db, "tareas"), { title, descripcion });
+
+export const optenerTarea = async () => {
+  const querySnapshot = await getDocs(collection(db, "tareas"));
+  return querySnapshot;
+};
+export const onOptenerTarea = (callback) =>
+  onSnapshot(collection(db, "Tareas"), callback);
+export { onSnapshot, collection };
