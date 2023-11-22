@@ -39,3 +39,4 @@ export const optenerTarea = async () => {
 export const onOptenerTarea = (callback) =>
   onSnapshot(collection(db, "Tareas"), callback);
 export { onSnapshot, collection };
+export const deleteTask = (id) => deleteDoc(doc(db, "tareas", id));
