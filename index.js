@@ -5,10 +5,14 @@ import {
   collection,
   db,
   deleteTask,
+  getTask,
 } from "./firebase.js";
 
 const tareaform = document.getElementById("tarea-formulario");
 const contenedorTareas = document.getElementById("contenedor-tarea");
+
+let editStatus = false;
+let id = "";
 
 window.addEventListener("DOMContentLoaded", async () => {
   try {
@@ -21,6 +25,7 @@ window.addEventListener("DOMContentLoaded", async () => {
         <h3>${tarea.title}</h3>
         <p>${tarea.descripcion}</p>
         <button class='btn-bdelete ' data-id=${docs.id}>Eliminar</button>
+        <button class='btn-editar' data-id=${docs.id}>Editar</button>
         </div>`;
       });
       contenedorTareas.innerHTML = html;
@@ -34,7 +39,48 @@ window.addEventListener("DOMContentLoaded", async () => {
           }
         })
       );
+      
+      //*Editar tareas
+      const btnEditar = contenedorTareas.querySelectorAll(".btn-editar");
+      btnEditar.forEach((btn) => {
+        btnEditar.forEach((btn) => {
+          btn.addEventListener("click", async (e) => {
+            try {
+              const doc = await getTask(e.target.dataset.id);
+              const task = doc.data();
+              tareaform["titulo_tarea"].value = task.title;
+              tareaform["descripcion_tarea"].value = task.descripcion;
+
+              editStatus = true;
+              id = doc.id;
+              tareaform["btn-guardar-tarea"].innerText = "Actualizar";
+            } catch (error) {
+              console.log(error);
+            }
+          });
+        });
+      });
     });
+
+    /*
+
+    btnsEdit.forEach((btn) => {
+      btn.addEventListener("click", async (e) => {
+        try {
+          const doc = await getTask(e.target.dataset.id);
+          const task = doc.data();
+          taskForm["task-title"].value = task.title;
+          taskForm["task-description"].value = task.description;
+
+          editStatus = true;
+          id = doc.id;
+          taskForm["btn-task-form"].innerText = "Update";
+        } catch (error) {
+          console.log(error);
+        }
+      });
+    });
+    */
 
     /*//*Prueba */
 
