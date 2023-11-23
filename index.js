@@ -6,6 +6,8 @@ import {
   db,
   deleteTask,
   getTask,
+  updateTask,
+  getTasks,
 } from "./firebase.js";
 
 const tareaform = document.getElementById("tarea-formulario");
@@ -39,7 +41,7 @@ window.addEventListener("DOMContentLoaded", async () => {
           }
         })
       );
-      
+
       //*Editar tareas
       const btnEditar = contenedorTareas.querySelectorAll(".btn-editar");
       btnEditar.forEach((btn) => {
@@ -61,54 +63,35 @@ window.addEventListener("DOMContentLoaded", async () => {
         });
       });
     });
-
-    /*
-
-    btnsEdit.forEach((btn) => {
-      btn.addEventListener("click", async (e) => {
-        try {
-          const doc = await getTask(e.target.dataset.id);
-          const task = doc.data();
-          taskForm["task-title"].value = task.title;
-          taskForm["task-description"].value = task.description;
-
-          editStatus = true;
-          id = doc.id;
-          taskForm["btn-task-form"].innerText = "Update";
-        } catch (error) {
-          console.log(error);
-        }
-      });
-    });
-    */
-
-    /*//*Prueba */
-
-    /*
-    const querySnapshot = await optenerTarea();
-    let html = "";
-    console.log(querySnapshot);
-    querySnapshot.forEach((docs) => {
-      const tarea = docs.data();
-      html = html += `
-        <div>
-        <h3>${tarea.title}</h3>
-        <p>${tarea.descripcion}</p>
-        </div>`;
-    });
-    contenedorTareas.innerHTML = html;
-    */
   } catch (error) {
     console.error("Error al obtener tareas:", error);
   }
 });
 
-tareaform.addEventListener("submit", (e) => {
+tareaform.addEventListener("submit", async (e) => {
   e.preventDefault();
   const titulo = tareaform["titulo_tarea"];
   const descripcion = tareaform["descripcion_tarea"];
 
-  guardartarea(titulo.value, descripcion.value);
+  if (!editStatus) {
+    guardartarea(titulo.value, descripcion.value);
+  } else {
+    try {
+      const existingTask = await getTask(id);
+
+      if (existingTask.exists()) {
+        await updateTask(id, {
+          titulo: titulo.value,
+          descripcion: descripcion.value,
+        });
+        editStatus = false;
+      } else {
+        console.error("El documento no existe:", id);
+      }
+    } catch (error) {
+      console.error("Error al actualizar la tarea:", error);
+    }
+  }
 
   tareaform.reset();
 });

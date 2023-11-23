@@ -42,3 +42,21 @@ export { onSnapshot, collection };
 export const deleteTask = (id) => deleteDoc(doc(db, "tareas", id));
 
 export const getTask = (id) => getDoc(doc(db, "tareas", id));
+
+export const updateTask = async (id, camposNuevos) => {
+  try {
+    const docRef = doc(db, "tareas", id);
+    const existingDoc = await getDoc(docRef);
+
+    if (existingDoc.exists()) {
+      return updateDoc(docRef, camposNuevos);
+    } else {
+      console.error("El documento no existe:", id);
+    }
+  } catch (error) {
+    console.error("Error en updateTask:", error);
+    throw error;
+  }
+};
+
+export const getTasks = () => getDocs(collection(db, "tasks"));
