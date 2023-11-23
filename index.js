@@ -23,11 +23,13 @@ window.addEventListener("DOMContentLoaded", async () => {
       querySnapshot.forEach((docs) => {
         const tarea = docs.data();
         html = html += `
-        <div>
-        <h3>${tarea.title}</h3>
+        <div class="card card-body mt-2 border-primary">
+        <h3 class="h5">${tarea.title}</h3>
         <p>${tarea.descripcion}</p>
-        <button class='btn-bdelete ' data-id=${docs.id}>Eliminar</button>
-        <button class='btn-editar' data-id=${docs.id}>Editar</button>
+        <div class="d-flex">
+        <button class='btn-bdelete btn btn-primary ' data-id=${docs.id}>Eliminar</button>
+        <button class='btn-editar btn btn-secundary' data-id=${docs.id}>Editar</button>
+        </div>
         </div>`;
       });
       contenedorTareas.innerHTML = html;
